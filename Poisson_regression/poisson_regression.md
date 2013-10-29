@@ -75,9 +75,9 @@ plot(elev50[], n50[], cex = 1, pch = 19, col = "grey", ylab = "# of Individuals"
 
 ![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5.png) 
 
-There seems to be a unimodal response of # of individuals to elevation. For this reason I will not use the simplest (linear) function to model the response, but rather a polynomial. Also, you can see that the variability of the data increases in intermediate elevations (and I remind you that this is count data): This makes it an excellent candidate for Poisson error structure (the larger the mean the larger the variance), or maybe even Negative-binomial error structure (not considered in this post). 
+There seems to be a unimodal response of # of individuals to elevation. For this reason I will use a polynomial function rather than the simplest (linear) function to model the response. Also, you can see that the variability of the data increases in intermediate elevations, and I also note that this is count data -- it makes it an excellent candidate for Poisson error structure (the larger the mean the larger the variance), or maybe even Negative-binomial error structure (not considered in this post). 
 
-### Centering and standardizing
+### Centering and standardization
    
 I find it necessary to center (to 0 mean) and standardize (to variance of 1) variables for MCMC simulations and for likelihood optimization. For models with log link function it really is essential --  it makes any algorithm opearting in log-space much more effective. Here I will define my own function ```scale2()```, but you can also use the R's native ```scale()```: 
 
@@ -112,9 +112,9 @@ $n_i \sim Poisson(\lambda_i)$
 
 The index $i$ identifies each grid cell (data point). $\beta_0$ - $\beta_2$ are model coefficients, and $n_i$ is the observed number of individuals in each grid cell.
 
-The notation roughly reads as: The logarithm of $\lambda_i$ is a deterministic function of the elevation data and the regression coefficients. The observed numbers of individuals are outcomes of a Poisson-distributed random process with parameter $\lambda$.
+The notation roughly reads as: The logarithm of $\lambda_i$ is a function of the elevation and the regression coefficients. The observed numbers of individuals are outcomes of a Poisson-distributed random process with parameter $\lambda$.
 
-I recommend to write down the formal definition of any statistical model that you are going to use. It will tell you everything about its assumptions and it will be easier to interpret the fitted model.
+I recommend to write down such formal definition of any statistical model that you are going to use. It will tell you everything about its assumptions and it will be easier to interpret the fitted model.
 
 
 Fitting the model using glm()
@@ -177,8 +177,8 @@ lines(elev.seq, new.predict, col = "red", lwd = 2)
 ### Advantages of glm()  
 - Fast.
 - Simple.
-- It pulls out all of the AICs and SEs and $R^2$s and you name it.
-- It works even on relatively big data.
+- It immediately gives you AIC, SEs, R^2 and the other cool stuff.
+- It works well even on relatively big data.
 
 ### Disadvantages of glm()  
 - Not very flexible.
@@ -232,14 +232,14 @@ m.like
 
 ```
 ## $par
-## [1]  3.194404  0.004336 -0.421933
+## [1]  3.194512  0.004524 -0.422051
 ## 
 ## $value
 ## [1] 2082
 ## 
 ## $counts
 ## function gradient 
-##      126       NA 
+##      132       NA 
 ## 
 ## $convergence
 ## [1] 0
@@ -387,12 +387,12 @@ summary(as.mcmc.list(jm.sample$beta2))
 ##    plus standard error of the mean:
 ## 
 ##           Mean             SD       Naive SE Time-series SE 
-##      -0.423172       0.020726       0.000378       0.000660 
+##      -0.422672       0.020429       0.000373       0.000701 
 ## 
 ## 2. Quantiles for each variable:
 ## 
 ##   2.5%    25%    50%    75%  97.5% 
-## -0.464 -0.437 -0.423 -0.409 -0.383
+## -0.464 -0.436 -0.422 -0.409 -0.383
 ```
 
 
@@ -426,11 +426,11 @@ You can see that the estimated parameter values very well match those from ```gl
   
 ### Advantages of MCMC 
 - Flexible - you can modify your models as much as you want and still fit them.
-- Reliable. It will never get stuck on local optimum.
-- Great in pulling out uncertainties of all kinds (such as the Prediction Intervals).
+- Reliable. It will never get stuck on a local optimum.
+- Great in pulling out uncertainties of all kinds (e.g. in the form of Prediction Intervals).
   
 ### Disadvantages of MCMC
-- Often slow to run. For more complex models or large datasets it can be a pain.
+- Often slow. For more complex models or large datasets it can be a pain.
 - It may be tedious to code and debug.
   
 Summary
@@ -438,7 +438,7 @@ Summary
   
 The three approaches gave roughly the same mean predicted values and the same mean estimates of model parameters. In contrast to glm() and ML otpimization, MCMC enabled me to monitor the full posterior distribution of predictions that included both uncertainty in the model estimation (given mostly by sample size) as well as uncertainty given by the variance of the Poisson distribution.
 
-The model obviously is not ideal as the data are clearly over-dispersed. Negative Binomial or quazi-Poisson models would be perphaps more appropriate.
+The model obviously is not ideal as the data are clearly over-dispersed. Negative Binomial or quazi-Poisson models would probably be more appropriate.
 
 An additional next thing to explore would be spatial dependence (spatial autocorrelation). 
 
