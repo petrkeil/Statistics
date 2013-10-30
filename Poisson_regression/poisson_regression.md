@@ -10,7 +10,6 @@ The complete code of this post is available [here on GitHub](https://github.com/
 
 The data
 ========  
-
   
 I will use the data on the distribution of 3605 individual trees of *Beilschmiedia pendula* in 50-ha (500 x 1000 m) forest plot in Barro Colorado (Panama). The dataset is freely available as a part of the R's `spatstat` library. 
 
@@ -239,14 +238,14 @@ m.like
 
 ```
 ## $par
-## [1]  3.194325  0.004128 -0.421897
+## [1]  3.194276  0.004546 -0.421969
 ## 
 ## $value
 ## [1] 2082
 ## 
 ## $counts
 ## function gradient 
-##      132       NA 
+##      120       NA 
 ## 
 ## $convergence
 ## [1] 0
@@ -397,12 +396,12 @@ summary(as.mcmc.list(jm.sample$beta2))
 ##    plus standard error of the mean:
 ## 
 ##           Mean             SD       Naive SE Time-series SE 
-##      -0.421908       0.021575       0.000394       0.000714 
+##      -0.422169       0.021159       0.000386       0.000675 
 ## 
 ## 2. Quantiles for each variable:
 ## 
 ##   2.5%    25%    50%    75%  97.5% 
-## -0.464 -0.437 -0.421 -0.408 -0.380
+## -0.465 -0.436 -0.422 -0.408 -0.382
 ```
 
 

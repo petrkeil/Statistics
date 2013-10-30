@@ -10,7 +10,6 @@ The complete code of this post is available [here on GitHub](https://github.com/
 
 The data
 ========  
-
   
 I will use the data on the distribution of 3605 individual trees of *Beilschmiedia pendula* in 50-ha (500 x 1000 m) forest plot in Barro Colorado (Panama). The dataset is freely available as a part of the R's `spatstat` library. 
 
