@@ -6,8 +6,11 @@ The goal of this post is to demonstrate how a simple statistical model (Poisson 
 
 The complete code of this post is available [here on GitHub](https://github.com/petrkeil/Statistics/tree/master/Poisson_regression)
 
+-------
+
 The data
 ========  
+
   
 I will use the data on the distribution of 3605 individual trees of *Beilschmiedia pendula* in 50-ha (500 x 1000 m) forest plot in Barro Colorado (Panama). The dataset is freely available as a part of the R's `spatstat` library. 
 
@@ -100,6 +103,7 @@ n50 <- n50[]
 ```
 
 
+-------
 
 The model
 =========  
@@ -112,10 +116,11 @@ $n_i \sim Poisson(\lambda_i)$
 
 The index $i$ identifies each grid cell (data point). $\beta_0$ - $\beta_2$ are model coefficients, and $n_i$ is the observed number of individuals in each grid cell.
 
-The notation roughly reads as: The logarithm of $\lambda_i$ is a function of the elevation and the regression coefficients. The observed numbers of individuals are outcomes of a Poisson-distributed random process with parameter $\lambda$.
+The notation roughly reads as: The logarithm of $\lambda_i$ is a function of the elevation and the regression coefficients. The observed numbers of individuals in each grid cell is an outcome of a Poisson-distributed random process with cell-specific parameter $\lambda_i$.
 
 I recommend to write down such formal definition of any statistical model that you are going to use. It will tell you everything about its assumptions and it will be easier to interpret the fitted model.
 
+-------
 
 Fitting the model using glm()
 =============================  
@@ -154,7 +159,7 @@ summary(m.glm)
 ```
 
 
-I use the model to make a smooth prediction curve of $\lambda_i$:
+I will then use the fitted model to make a smooth prediction curve of $\lambda_i$:
 
 ```r
 elev.seq <- seq(-3, 2, by = 0.05)
@@ -184,6 +189,8 @@ lines(elev.seq, new.predict, col = "red", lwd = 2)
 - Not very flexible.
 - It is tricky to pull out prediction intervals. In my case I could use some combination of bootstrap and ```qpois()```, but it would get quite messy in any case.
 
+
+-------
 
   
 Fitting the model by maximum likelihood
@@ -232,7 +239,7 @@ m.like
 
 ```
 ## $par
-## [1]  3.194512  0.004524 -0.422051
+## [1]  3.194325  0.004128 -0.421897
 ## 
 ## $value
 ## [1] 2082
@@ -264,18 +271,21 @@ lines(elev.seq, new.predict, col = "red", lwd = 2)
 
   
 ### Advantages of likelihood optimization
-- Flexible - you can modify your models as much as you want and still fit them.
+- More flexible than ```glm()``` - you can modify your models as much as you want and you will be able to fit them.
 - Often faster than MCMC.
   
 ### Disadvantages of likelihood optimization
 - The optimization algorithm may crash, or it can get stuck at a local optimum.
 - Difficult to get prediction intervals (or any measure of uncertainty).
   
+  
+-------
 
 Fitting the model by MCMC in JAGS
 =================================  
   
-I will use JAGS to fit the model, which in R is accessed conveniently through the ```rjags``` library:
+MCMC stands for Markov Chain Monte Carlo sampling. It can be used to estimate posterior distributions of model parameters (i.e. to "fit a model") in a Bayesian setting. The most common flavors of MCMC are Metropolis-Hastings algorithm and Gibbs sampling.
+I will use the MCMC sampler in [JAGS](http://mcmc-jags.sourceforge.net/) to fit the model, which in R is accessed conveniently through the ```rjags``` library:
 
 ```r
 library(rjags)
@@ -289,7 +299,7 @@ jags.data <- list(N.cells = length(n50), n50 = n50, elev50 = elev50)
 ```
 
 
-And this is the model written in the JAGS code and dumped into a file:
+And this is the model written in the JAGS (BUGS) language, which is very similar to R, but it is not the same:
 ```
   cat("
       model
@@ -310,8 +320,9 @@ And this is the model written in the JAGS code and dumped into a file:
       }
   ", file="model.txt")
 ```
+I have actually dumped the code into a file.
 
-Specifying the parameters that will be monitored:
+Here I specify the parameters that will be monitored during the MCMC sampling:
 
 ```r
 params <- c("beta0", "beta1", "beta2", "prediction")
@@ -334,22 +345,21 @@ jm <- jags.model("model.txt", data = jags.data, n.chains = 3, n.adapt = 1000)
 ```
 
 
-Burn-in:
+You usually need to throw away the initial samples (the so-called "burn-in" phase):
 
 ```r
 update(jm, n.iter = 1000)
 ```
 
 
-Sampling from the posteriors and saving the samples:
+And here I am sampling from the posteriors and I am saving the samples for inference:
 
 ```r
 jm.sample <- jags.samples(jm, variable.names = params, n.iter = 1000, thin = 1)
 ```
 
 
-
-Traceplots of the three regression coefficients, and their posterior density plots:
+I can plot the Markov chains of the three regression coefficients, and their posterior density plots which are marginal distributions of the chains:
 
 ```r
 plot(as.mcmc.list(jm.sample$beta0), main = "Beta_0")
@@ -370,7 +380,7 @@ plot(as.mcmc.list(jm.sample$beta2), main = "Beta_2")
 ![plot of chunk unnamed-chunk-22](figure/unnamed-chunk-223.png) 
 
 
-Or you can pull out a summary for an individual parameter, e.g. $\beta_2$:
+Here I pull out a summary for an individual parameter, e.g. $\beta_2$:
 
 ```r
 summary(as.mcmc.list(jm.sample$beta2))
@@ -387,17 +397,17 @@ summary(as.mcmc.list(jm.sample$beta2))
 ##    plus standard error of the mean:
 ## 
 ##           Mean             SD       Naive SE Time-series SE 
-##      -0.422672       0.020429       0.000373       0.000701 
+##      -0.421908       0.021575       0.000394       0.000714 
 ## 
 ## 2. Quantiles for each variable:
 ## 
 ##   2.5%    25%    50%    75%  97.5% 
-## -0.464 -0.436 -0.422 -0.409 -0.383
+## -0.464 -0.437 -0.421 -0.408 -0.380
 ```
 
 
 
-Here I pull out the predictions and the 95% Prediction Intervals:
+I pull out the predictions and the 95% Prediction Intervals:
 
 ```r
 predictions <- summary(as.mcmc.list(jm.sample$prediction))
@@ -422,23 +432,26 @@ legend("topleft", legend = c("95% P.I.", "lambda_i"), col = c("black", "red"),
 ![plot of chunk unnamed-chunk-25](figure/unnamed-chunk-25.png) 
 
 
-You can see that the estimated parameter values very well match those from ```glm()``` and from ML optimization. The striking result is that the data are clearly over-dispersed. Prediction intervals are really good at showing that -- the data simply spread a lot out of the P.I. boundaries. 
+You can see that the estimated parameter values very well match those from ```glm()``` and from the ML optimization. The striking result is that the data are clearly over-dispersed. Prediction intervals are really good at showing that -- the data simply spread a lot out of the black P.I. boundaries. 
   
 ### Advantages of MCMC 
-- Flexible - you can modify your models as much as you want and still fit them.
+- Flexible - you can modify your models as much as you want and still effectively fit them.
 - Reliable. It will never get stuck on a local optimum.
 - Great in pulling out uncertainties of all kinds (e.g. in the form of Prediction Intervals).
+- Even though the MCMC procedure is complicated, the inference based on the posterior distributions is very easy and intuitive.
   
 ### Disadvantages of MCMC
 - Often slow. For more complex models or large datasets it can be a pain.
 - It may be tedious to code and debug.
   
+-------
+
 Summary
 =======  
   
 The three approaches gave roughly the same mean predicted values and the same mean estimates of model parameters. In contrast to glm() and ML otpimization, MCMC enabled me to monitor the full posterior distribution of predictions that included both uncertainty in the model estimation (given mostly by sample size) as well as uncertainty given by the variance of the Poisson distribution.
 
-The model obviously is not ideal as the data are clearly over-dispersed. Negative Binomial or quazi-Poisson models would probably be more appropriate.
+The model obviously is not ideal: the data are clearly over-dispersed. Negative Binomial or quazi-Poisson models would probably be more appropriate.
 
 An additional next thing to explore would be spatial dependence (spatial autocorrelation). 
 
