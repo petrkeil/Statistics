@@ -43,14 +43,14 @@ abline(v = 1000, col = "grey")
 
 Adam has created a little script that puts the individuals on Google Map:
 <!-- Map generated in R 3.0.1 by googleVis 0.4.7 package -->
-<!-- Thu Nov 21 00:14:52 2013 -->
+<!-- Thu Nov 21 15:34:17 2013 -->
 
 
 <!-- jsHeader -->
 <script type="text/javascript">
  
 // jsData 
-function gvisDataMapID9846dd14b3b () {
+function gvisDataMapID1f2012e57223 () {
 var data = new google.visualization.DataTable();
 var datajson =
 [
@@ -18083,8 +18083,8 @@ return(data);
 }
  
 // jsDrawChart
-function drawChartMapID9846dd14b3b() {
-var data = gvisDataMapID9846dd14b3b();
+function drawChartMapID1f2012e57223() {
+var data = gvisDataMapID1f2012e57223();
 var options = {};
 options["showTip"] = false;
 options["showLine"] = false;
@@ -18096,7 +18096,7 @@ options["width"] =    800;
 options["height"] =    400;
 
     var chart = new google.visualization.Map(
-    document.getElementById('MapID9846dd14b3b')
+    document.getElementById('MapID1f2012e57223')
     );
     chart.draw(data,options);
     
@@ -18120,9 +18120,9 @@ if (newPackage)
   pkgs.push(chartid);
   
 // Add the drawChart function to the global list of callbacks
-callbacks.push(drawChartMapID9846dd14b3b);
+callbacks.push(drawChartMapID1f2012e57223);
 })();
-function displayChartMapID9846dd14b3b() {
+function displayChartMapID1f2012e57223() {
   var pkgs = window.__gvisPackages = window.__gvisPackages || [];
   var callbacks = window.__gvisCallbacks = window.__gvisCallbacks || [];
   window.clearTimeout(window.__gvisLoad);
@@ -18146,11 +18146,11 @@ callbacks.shift()();
 </script>
  
 <!-- jsChart -->  
-<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartMapID9846dd14b3b"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartMapID1f2012e57223"></script>
  
 <!-- divChart -->
   
-<div id="MapID9846dd14b3b"
+<div id="MapID1f2012e57223"
   style="width: 800px; height: 400px;">
 </div>
 
@@ -18418,14 +18418,14 @@ m.like
 
 ```
 ## $par
-## [1]  3.194531  0.004519 -0.422090
+## [1]  3.194430  0.004592 -0.421925
 ## 
 ## $value
 ## [1] 2082
 ## 
 ## $counts
 ## function gradient 
-##      154       NA 
+##      116       NA 
 ## 
 ## $convergence
 ## [1] 0
@@ -18562,12 +18562,12 @@ summary(as.mcmc.list(jm.sample$beta2))
 ##    plus standard error of the mean:
 ## 
 ##           Mean             SD       Naive SE Time-series SE 
-##      -0.423177       0.020679       0.000378       0.000671 
+##      -0.422772       0.021503       0.000393       0.000723 
 ## 
 ## 2. Quantiles for each variable:
 ## 
 ##   2.5%    25%    50%    75%  97.5% 
-## -0.465 -0.437 -0.423 -0.409 -0.383
+## -0.465 -0.438 -0.423 -0.408 -0.383
 ```
 
 
