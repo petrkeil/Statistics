@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=9" >
+
+<title>Univariate Normal Model</title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: rgb(88, 72, 246)
+   }
+
+   pre .number {
+     color: rgb(0, 0, 205);
+   }
+
+   pre .comment {
+     color: rgb(76, 136, 107);
+   }
+
+   pre .keyword {
+     color: rgb(0, 0, 255);
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: rgb(3, 106, 7);
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+<!-- MathJax scripts -->
+<script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+</head>
+
+<body>
+<h1>Univariate Normal Model</h1>
+
+<p><strong>Simulation of data in R is easy!</strong> The R functions <code>rnorm()</code>, <code>rpois()</code>, <code>runif()</code>, <code>rbinom()</code>, <code>rgamma()</code>, <code>rbeta()</code> etc. are exactly for that.</p>
+
+<p>We will generate some Normally-distributed data:</p>
+
+<pre><code class="r">my.mean &lt;- 0
+my.sd &lt;- 1
+my.n &lt;- 100
+x &lt;- rnorm(n = my.n, mean = my.mean, sd = my.sd)
+x &lt;- sort(x)
+x
+</code></pre>
+
+<pre><code>##   [1] -3.916418 -2.482945 -2.414422 -2.281430 -1.781853 -1.634923 -1.548759
+##   [8] -1.432588 -1.399622 -1.355268 -1.354296 -1.267450 -1.218600 -1.157303
+##  [15] -1.152283 -0.929930 -0.905597 -0.879096 -0.860917 -0.832781 -0.817011
+##  [22] -0.802382 -0.715993 -0.698022 -0.678420 -0.675179 -0.664158 -0.639509
+##  [29] -0.588518 -0.560476 -0.540123 -0.534239 -0.520529 -0.471996 -0.427195
+##  [36] -0.420220 -0.417014 -0.415396 -0.410394 -0.397998 -0.325056 -0.299200
+##  [43] -0.294751 -0.268714 -0.219133 -0.217813 -0.211846 -0.195755 -0.170432
+##  [50] -0.161948 -0.157000 -0.113988 -0.108891 -0.063836 -0.052527 -0.006385
+##  [57]  0.037360  0.045570  0.115290  0.133155  0.145331  0.182334  0.187330
+##  [64]  0.193656  0.196420  0.204647  0.244757  0.398565  0.443770  0.450654
+##  [71]  0.503619  0.537002  0.612920  0.629975  0.641650  0.667960  0.838689
+##  [78]  0.856065  0.928716  0.932893  0.950009  0.964289  0.974006  0.974121
+##  [85]  1.004798  1.132962  1.152657  1.326811  1.331624  1.463424  1.476194
+##  [92]  1.494242  1.518013  1.589052  1.590584  1.631632  1.754993  1.988363
+##  [99]  2.382813  3.059123
+</code></pre>
+
+<p>Plotting the data and PDF that generated them:</p>
+
+<pre><code class="r"> # empirical histogram
+  hist(x, freq=FALSE, ylab=&quot;Density&quot;)
+ # adding the points to the bottom  
+  points(x, rep(0, times=my.n))
+
+ # plotting the probability density function (PDF)
+ # used to generate the data
+   x2 &lt;- seq(from=min(x), to=max(x), by=0.1)
+ # calculating the probability density   
+   y &lt;- dnorm(x2, mean=my.mean, sd=my.sd)
+
+   lines(x2, y)
+</code></pre>
+
+<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-2"/> </p>
+
+<hr/>
+
+<h2>Likelihood - single data point</h2>
+
+<p>The <em>likelihood function</em> is the density evaluated at the data \( x_1 \), &hellip; ,\( x_n \), viewed as a function of model parameters (\( \mu \) and \( \sigma \) in case of the Normal model). We write it as \( L(\mu, \sigma | x) = p(x | \mu, \sigma) \).  </p>
+
+<p><strong>Calculation of likelihood in R is easy!</strong> The R functions <code>dnorm()</code>, <code>dpois()</code>, <code>dunif()</code>, <code>dbinom()</code>, <code>dgamma()</code>, <code>dbeta()</code> etc. are exactly for that!</p>
+
+<p>Example: What is the probability density at the specific value of the data, given the \( Normal(\mu, \sigma) \) model?</p>
+
+<pre><code class="r"># this is the data point that we will examine:
+one.data.point &lt;- x[1]
+
+# this is how you calculate the likelihood for the data point:
+L &lt;- dnorm(x = one.data.point, mean = my.mean, sd = my.sd)
+L
+</code></pre>
+
+<pre><code>## [1] 0.0001863
+</code></pre>
+
+<pre><code class="r">likelihood.plotter &lt;- function(x, point.index, mean, sd)
+{
+  x.axis &lt;- seq(from=min(x), to=max(x), by=0.1)
+  y.axis &lt;- dnorm(x.axis, mean=mean, sd=sd)
+  point.value &lt;- round( x[point.index], 2)
+
+  L &lt;-dnorm(point.value, mean=mean, sd=sd)
+  L &lt;- round(L, 4)
+
+  # plotting  
+  title &lt;- paste(&quot;Model parameters: mean =&quot;, mean, &quot;; sd =&quot;, sd)
+  plot(x.axis, y.axis, 
+       ylim=c(0,max(y.axis)), 
+       type=&quot;l&quot;, xlab=&quot;x&quot;, ylab=&quot;PDF&quot;,
+       main=title)
+  points(x, rep(0, times=length(x)), col=&quot;grey&quot;)
+  points(point.value, 0, pch=19)
+  lines(c(point.value,point.value), c(0, L), col=&quot;red&quot;)
+  lines(c(min(x), point.value), c(L, L), col=&quot;red&quot;)
+  text(x=min(x), y=L+0.02, pos=4,
+       labels=paste(&quot;p(x|mean,sd) =&quot;,L), col=&quot;red&quot;)
+  text(x=point.value+0.02, y=0.02, pos=4,
+       labels=paste(&quot;x =&quot;,point.value), col=&quot;red&quot;)
+} 
+</code></pre>
+
+<p>Let&#39;s play around with the function a bit. Try to change the paramters and see
+what it does:</p>
+
+<pre><code class="r">likelihood.plotter(x = x, point.index = 30, mean = 0, sd = 1)
+</code></pre>
+
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfgAAAH4CAMAAACR9g9NAAAA5FBMVEX9/v0AAAAAACoAAFQAKioAKn8AVX8AVakqAAAqACoqAFQqKgAqKioqKlQqKn8qVVQqf38qf9NUAABUACpUAFRUKgBUVSpUVVRUf39UqalUqf1/KgB/Kip/qX9/1Kl/1NN/1P2pVQCpqVSp1H+p/qmp/v2+vr7TfyrT1H/T/qnT/tPT/v39fyr9qVT91H/9/qn9/tP9/v3+AAD+ACr+AFT+KgD+Kir+KlT+Kn/+VQD+VSr+VVT+fyr+f1T+f6n+qX/+qf3+1NP+1P3+/qn+/v3/AAD/ACr/AFT/KlT/Kn//Van/f9OwvNOqAAAATHRSTlP/////////////////////////////////////////////////////////////////AP//////////////////////////////////fdCdzAAAAAlwSFlzAAALEgAACxIB0t1+/AAAE7FJREFUeJztnQ1/27YRh8d4XrxuyyY3Wzc73eyttrvGIsW8dPO6F8+Nkjn+/t9nAEiKpERRAHgADsT/6S+VRYmHu3sIkFQq9yclSJKfhE4AhAHiEwXiEwXiEwXiEwXiEwXiEwXiEwXiEwXiEwXiEwXiEwXiEwXiEwXiEwXiEwXiEwXiEwXiEwXiEwXiEwXiEwXiEwXiEwXiE4WV+NV5li3E402WHb/uv1ScdrYUp0dX9qNcntnvO4pM//nI670aWvKTsZ1cwUz8s1+I3sgGuhN/mbkSf5llo+aHxV+OHy2u4Cb+d0JpcfrrE9kiMfHVAiAPhD+cNlvOWvGr86M/Z5n8eSleeHahAojH+tky+9m5ePVG7VPvK2PJRteR6h3yExWmiTu0Y2eMZtD6tfplMXOPrpoIm0Ozjtypob+T2P5LiBcavj45Ex3+vRSvJpBoinKl1oBqy6Ijvn6lOK0e1Ybjv9bPllmDeHu9by2+idTfoRW/u2PZG6OZpV2HS7ntUhwaZSt+a6cB8a8ulhAvxP/xdFHeHP1FiM9PRA+LUzkdRRNvMrlFnQfaeSXaqYSoFsqNYkPdRPlsKbyJGXdWBan3VUv95lm1g3raYXjHdoyFeMfuqr2Uy9PWiaSJvKlhoGqIl+IvLo+/Oz/+9kTOV9mPm+xM/SDPj/VEfHbRWeqv5FsW1dSSUpoJJ5/JHStV1epfLdVSzeZZtYOal53LhuEdu2MUA6v2kPgm8qaG7Z1KiC8r8TdH35wuckPx8kzaim+eVf7kOntAfLVHdcxIBndsx1BXA0Pi26V+Qx0Z4keRjc5PvqrW1z1LvWRnqZeTXr6t8tg86/prV/PNUt+MWLbbawZ3bMfoiO/SvbjrISJjqR9FNlp4lCfYkYu79iJs88oy68745lnX32bf6vapedZfItqLu4Ed2zH2iO/ezjWR2mWic3G3BcSXdaOf1zOyezv3G9Xpy6p5/du5+oWFOCvUE7h+1vPX7Ctd1MeQumrbLPVqfRkQv9lxM8Y+8Z0PcHq3czJIW8MOEG9Mc7HNkPzFkGNGQLwTxO156BQOAPGJErV4YA/EJwrEJwrEJwrEJwrEJwrEJwrEJwrEJwrEJwrEJwrEJwrEJwrEJwrEJwrEJwrEJwrEJwrEJwrEJ8oU8RngjEPxE/YFroH4RIH4RIH4RKERn38x8JUViOfMVPHVb3HJer8xQi80CMrkGa++8YsZHx0ES31xevwtxMcGyTle/SYP09AgKLiqTxSITxQq8cXLzWKv+WkwCApm/FQiPcQhfhqV9AjlTxZf/aq2gc9vUhDf1R1ZuVPFr86rX/i43P0dbZF1woJs5Bl3Jn9kW1/UdS7uNEPHz3aBURWMGW/Nbn0xVUzwWX2i5/ih8iIqGVf1lgxXF0/NEG/HnuLiqRnirdhbWzRFQ7wV+2uLpWqIt2GstEjKhngLRiuLpGyIt2C8sjjqhnhzDhUWReEQb8zBuqIoHOKNOVxXDJVDvCkaZcVQOcSbolNWBKVDvCFaVUVQOsQbolcV/9oh3gzNovjXDvFm6BbFvniIN0K7JvbFQ7wR+jVxrx7ijYD46aFjxKAk7tVDvAkmJTEvH+INMKqIefnhxN8+qYfi3QezsKv39/nj9sbizbretlyvP32o3ycf8k+G8Ucwc8nbfDDxjTwb8c1B09/2WYUVnqufbtdS/HIN8YN4F1+8++f640NZ3t2Xd0/CkRC/+v5f6/WTmKpPaupKU/l6Lbzlj3drpW8zkcXL/xOSt48W+byd2uqnXL6vvPv4HzrxpiZZm/cv/s1jufz0Qaoq3v34Tv6wev9ZmP6shKmDoSzePshnuTgUlmplkG+XE1m8vJSHwl01m9fr6sCQy4fcp0K+cfX9f8mXeoifErp4cy+sPKiV/laIVTP+QW6S6qS9ejqLBymtEldblS+pc/fWWr/siM/VgnL7RH6ON/fI2bx/8W/VOq8mcv7xYVv8GzGH1ZlALu2teLn2f3yontztiu/PePGT2ADxowQR38z4ux8+b4uvZ7tYFvKe+FJN6/6Mb5f6/jleHBq36iX5JjLxNhYZmw+w1H9uFOaPQndfvDqJPypbYjloxcsFQv7pneNbVu+f6mv5dtGnnvEQPy108fYf9VW9NLN83BIv1np1il7Lq/davLroq67qV+8Hr+rr+3h1L1edKniIZ2w+zDm+NLuP/2H7Ldv38R6wUwjxGzbXYPqf3K3+vbVh95M790A8Vei4sC2GbRMgXg+IJwsdFda1sG0CxGthXwvXLkC8FhBPFzomJpTCtQsQrwPEE4aOiSmlMG0DxOsA8YShI2JSJUzb4E/8OmImdIGrecx4DSCeMnQ8ZBBPGToeJorn2QiIPwzEk4aOhmziOZ5nIyD+IJPFs+wExB8E4mlDRwPE04aOhWzqfXzJshUQfwiIJw4dCxBPHDoSZBWTxTPsBcQfAOKpQ0cCxFOHjgNVxHTx/JoB8eNAPHnoOIB48tBRUNVAIJ5dNyB+FIinDx0FEE8fOgbqEijEc2sHxI8B8Q5CxwDEOwgdAU0FJOKZ9QPiR4B4F6EjAOJdhObPpgCIpwzNH2LxvBoyWXx+ki0us+zoyjQ0fyB+hNX5WXkprOcvXhuGZk+bP8TvUry8KpeL6tEsNHsgfgw54yWY8UYRwzP5HF+cSvM38zvHd9KHeMrQ3IF4R6G5A/FadC7usgb7rDjgQDwn85jxe+hmD/GUoZkD8QfIT9SyPrureogfp7mPXx7P6z6+lzyZeEY9ofjkrvuoH5o3EH8AzHj7sEEh+ORujuf4fu504vk0BVf1g0C8u9CsgXh3oVkD8e5Cc2YrdULxbLoC8UNAPMRLIJ4yNGO2M6cUz6UtED8AxEO8AuIpQzPGqXgmfYH4XXYSh3jK0HyBeIivgHjK0HxxLJ5HYyB+h928IZ4yNFsgvoT4CmLxLDoD8TtAfJmk+IG0IZ4yNFc8iOfQGojfBuIlEC+BeMrQTBnKGuIpQzPFi3gGvYH4LSBeAfESiKcMzZPBpOnFh28OxPeB+AqIl0A8ZWieQHxFauKHc3YgPnh3IL4HxNdAvATiKUNzZE/KLsSHbg/Ed4H4BoiXQDxlaI5AfENa4vdl7ER84P5AfAeI3wDxEoinDM2PvQlDPGVofngWH7ZBEN8C8S0QL4F4ytDs2J8vxFOGZod38UE7BPEbIL4DxEsgnjI0N0bShXjK0NwIID5kiyC+AeK7QLwE4ilDM2MsW4inDM2MIOID9gjiayC+B8RLIJ4yNC9Gk4V4ytC8CCQ+XJMgvgLi+0C8BOIpQ7NiPFeIpwzNimDig3UJ4hUQvwXESyCeMjQnDqQK8ZShORFQfKg2QbwE4reR4ouXVy5CcwLit2nE5y9eU4dmxKFMnYoP1CeILyF+AIiXpCr+NKs4GjrX5yfZs4vBC4FoxB9MNFHxo6zOz8SfBcS7HD/AoAfFV8Ivn0O8w/EDDFqJF8v5noVezXjBzU+/gHhn4wcYVIlfypO4sH829I7idCEfbnaPi1jEH87TsfggndIQv3p1oX42vbKHeLoMvI/Z/eTO9BM8iKfLwPuY2uI7L2YNFPm5RyNNiKcMzQUG4kO0avIHONahuQDxQxz+a1l1qzd4UMQhXidLiN+lvo8vl8c7l/wQT5uF1xGVeDmpB+/hy9ELAIinzcLriOo+XkzqfPeDuQrMeG9ZeB2xuapvPsTZpb70i/Ucr5VkyuLP96311qF5wES8/2ZBvAapip/xfbxejomKdxSaBRC/B4iXeBDvvVsQrwHEU4bmgGaKEE8ZmgMQvw+Il/gQ77tdEK8BxFOGZoBuhhBPGZoBEL8XiJd4Ee+5XxCvAcRThg6PdoIQTxk6PMzE+20YxGsA8ZShwwPx+5mzeP38PIn32jGI1wDiKUMHB+JHgHiJL/E+W5aueIP0IJ4ydGggfgyIl0A8ZejAmGTnTbzHnkG8BhBPGTowED/KbMUbJedPvL+mQbwGEE8ZOiwQP/7yXMWb5eZRvLeuQbwGEE8ZOigQn6Z4w9R8ivfVNojXAOIpQ4cE4tMUb5oZxFOGDghr8Z76BvEaQDxl6HAYJwbxlKHDAfGHR4F4iV/xfhqXoHjzvCCeMnQwIF5jEIiXeBbvpXPpibdIC+IpQ4cC4nXGmJ94m6wgnjJ0IGIQ76N1EK8BxFOGDoNVUhBPGToMcYj30DuI1wDiKUMHwS4niKcMHYRYxLtvHsRrAPGUoUNgmVIA8c67B/EaQDxl6BBAvG78eYm3zSiEeNftg3gNIJ4ydAAgXjv8rMRbJxREvOP+QbwGEE8Z2j+RiXfbQIjXAOIpQ3vHPh+IpwztnejEO+0gxGsA8ZShfTMhnVDiXbYQ4jWAeMrQvoF4k9AHxRenWcXRlWFoz0zJJph4hz2cPONX5wu70J6BeKPIGkt98eWFVWi/TEomnHh3TUzlHA/xZoHnIn5aLhC/n+Ll5uIua7DPipxoxTszjxmvAcRThvbJxFRCinfVxsni85M9t/EQTwNT8avzM/W4PH5tGNojUzOB+F2ai7rOxZ1maI9ELd5RH1OY8ZMTgfgB6g/rOZ/jIxfvppEpXNVDvHnQOYifngfEU4b2RvTinXRy/uIJ0oB4ytC+gHibmBAvCS3eRStnL54iC4inDO2JWYh30EuI1wDiKUP7gSQJiKcM7YeZiKdv5szF0+QA8ZShvTAb8eTdnLd4ohQgnjK0D2YknrqdsxZPlQHEU4b2wKzEE/dzzuLJEoB4ytDumZl42obOWDzd+BBPGdo5sxNP2tH5iiccHuIpQ7tmhuIpa5qteMrRIZ4ytFtIB2cjnrAsiNcA4ilDO4V2bD7i6QqDeA0gnjK0S4iHZiSerDSI1wDiKUM7hHpkTuKpioN4DViJJ6pujuLJB4Z4ytDumLl4mvpmKJ5+XGbiSSqEeA0gnjK0KxwMy008RY2zE+9iVHbiCaqEeA0gnjK0G5wMyk/89DpnJt7NmAzFT64U4jWAeMrQLnA0JEfxU2udlXhXI0I8ZWgHJCV+YrVzEu9sQJ7ip9U7I/HuxoN4ytDUOByOqfhJJUO8BlzFT6l5NuJdjsZW/ISq5yLe6WB8xdvXPRPxbsdiLN668nmIdzwUZ/G2tc9CvOuRWIu3rH4O4p0PxFu8Xf0zEO9+HObirToQv3gPw3AXX2bmTYhdvEXJ5hwQX7xZP1Y/3a7X608fytX79ccH92l1MW5D5OL9rCrj4lfv78vbz+rHu/vmYfnoPKs+pp2IW7yns0kj/u6pMdylePehzMU8F4fA9w/NBv8Y9iJq8b4uHxvxxbsfldPlWnJfb83F5C7eSuVizZeb88c770t9adqNmMV7u1/cLPW366fdV5cb8bnQLWZ9ruT7Sq7FqB/xivdyWVexEZ9vT+S79fpzO+OrTfdbG/xh0pFoxfv8m4CN+Lsf1Cm+v9S35/jqPffF3wOJN2lKpOI9TveyFZ8/1pdvPVbvm2s+ueiv/vZBXtWHWOpLk75EKd6v9o14ed82dJtW3cfLSS/u4+XJQGz4FOLCXqLbmwjF+9YewSd3PfT6E5/4AN/TiEu8nvrYxPuf7mV84nXaFJf4INpjFH+4VTGJD6Q9TvGyXWP9miw+P8kkR1emoQ0ZL8MtcYovR5s2Vfzq/Ew9Lo9fG4Y2IAtpvYxYfLl/mZwqvnh51XvUD61JaOmSmMXv6yDvGc9AuiRu8ZJd+ZPP8cWpm3N8xmGq18QvfhdvV/XX19cau7Qceuu14mDo3nuqJ9fNrtcbtqJuvZyts3bz9TA7wXZf62bUeev2S5vSem850Eit7vbe5Uv8df1n6H36tnvxVAPHQ/der6y3/1Qh6of67df9rlfehfis3bqlXnWz/ne9oc1v81prvjn06te64183+zVvryvsFThY7VgL9ryLSnzn4m5Q47XYfJ0NojtED4gfKvNgz+jFD6A7463wKj6DeBMszvEGdHvp+hyf4Ry/i69P7gAtvO/jgTPYf3IH3IAZnyhsP7kDbonp7+MBIRCfKBCfKBCfKBCfKBCfKC7FA864E985BOLYD2m2QDy//SCeej+k2QLx/PaDeOr9kGYLxPPbD+Kp90OaLTTiQXRAfKJAfKJAfKJAfKJAfKJAfKJAfKJAfKJAfKIQiW++b2PGcvB7GoeR3+O0Ga/MvzAfrjjNdr9E5Gw069pMe0kk/sYmWdmYm+fm+xVfXpT5zy/Md1xaHGfykLZJ0m4069qMe0kjPv/Vb61moN2sWMoCL80HvHz2tflo8suiVlPXajTr2iRGaZKIX736k9VSL7CbTNXMMMfCYP7iteVgdsdLaVubYS9JxN8s7M7x4oT2zK7G1fnCajxzFfJbwn7F29Zm1sup4i+z7LmYFMbi5X7y0bSn1X7F6cJquBhmvHFt7Z4maVLM+Bv1n3Ev7Ha2OZ/lJ/6uKKzP8dZX9Za1lWa9DHk7Z7uK2vfGQoVceC0vRGzE29Zm3Mug9/FiqbA5x1crjM2A/O/jrWsz7SU+uUsUiE8UiE8UiE8UiE8UiE8UiE8UiE8UiE8UiE8UiE8UiE8UiE8UiE8UiE8UiE8UiE8UiE8UiE8UiE8UiE8UiE8UiK+4tP6v5yMF4iuKl9/s/j9U5wzE19zYfgcsUiC+xuo3LUQMxNdcfpXUKR7ia/IX371KaspDvEJ+6XPgf5Q+YyA+USA+USA+USA+USA+USA+USA+USA+USA+USA+USA+USA+USA+USA+USA+USA+USA+USA+Uf4PwQVWBJ+eXcwAAAAASUVORK5CYII=" alt="plot of chunk unnamed-chunk-5"/> </p>
+
+<hr/>
+
+<h2>Likelihood - whole dataset</h2>
+
+<p>Basic probability theory tells us that:</p>
+
+<p>\[ P(A \cap B) = P(A) \times P(B|A) = P(B) \times P(A|B)  \]</p>
+
+<p>The problem is that \[  P( A \cap B \cap C \cap D ) \]
+can be almost impossible to calculate,</p>
+
+<p><strong>with the exception of</strong>
+ A and B being independent! Then: 
+\[ P(A \cap B) = P(A) \times P(B)  \]
+and hence
+\[  P( A \cap B \cap C \cap D ) = P(A) \times P(B) \times P(C) \times P(D) \]</p>
+
+<p>It follows that it is useful to subject <em>probability density \( p() \)</em> to the same rules as <em>probability \( P() \)</em>. Hence, we can calculate the likelihood for the whole dataset as a product of likelihoods for all data points!</p>
+
+<pre><code class="r">x
+</code></pre>
+
+<pre><code>##   [1] -3.916418 -2.482945 -2.414422 -2.281430 -1.781853 -1.634923 -1.548759
+##   [8] -1.432588 -1.399622 -1.355268 -1.354296 -1.267450 -1.218600 -1.157303
+##  [15] -1.152283 -0.929930 -0.905597 -0.879096 -0.860917 -0.832781 -0.817011
+##  [22] -0.802382 -0.715993 -0.698022 -0.678420 -0.675179 -0.664158 -0.639509
+##  [29] -0.588518 -0.560476 -0.540123 -0.534239 -0.520529 -0.471996 -0.427195
+##  [36] -0.420220 -0.417014 -0.415396 -0.410394 -0.397998 -0.325056 -0.299200
+##  [43] -0.294751 -0.268714 -0.219133 -0.217813 -0.211846 -0.195755 -0.170432
+##  [50] -0.161948 -0.157000 -0.113988 -0.108891 -0.063836 -0.052527 -0.006385
+##  [57]  0.037360  0.045570  0.115290  0.133155  0.145331  0.182334  0.187330
+##  [64]  0.193656  0.196420  0.204647  0.244757  0.398565  0.443770  0.450654
+##  [71]  0.503619  0.537002  0.612920  0.629975  0.641650  0.667960  0.838689
+##  [78]  0.856065  0.928716  0.932893  0.950009  0.964289  0.974006  0.974121
+##  [85]  1.004798  1.132962  1.152657  1.326811  1.331624  1.463424  1.476194
+##  [92]  1.494242  1.518013  1.589052  1.590584  1.631632  1.754993  1.988363
+##  [99]  2.382813  3.059123
+</code></pre>
+
+<pre><code class="r">
+L &lt;- dnorm(x = x, mean = my.mean, sd = my.sd)
+L
+</code></pre>
+
+<pre><code>##   [1] 0.0001863 0.0182892 0.0216304 0.0295580 0.0815582 0.1048290 0.1202400
+##   [8] 0.1429739 0.1498068 0.1592446 0.1594545 0.1786810 0.1898669 0.2042086
+##  [15] 0.2053959 0.2588974 0.2647441 0.2710794 0.2754009 0.2820417 0.2857347
+##  [22] 0.2891392 0.3087383 0.3126860 0.3169328 0.3176287 0.3199817 0.3251644
+##  [29] 0.3355061 0.3409549 0.3447951 0.3458866 0.3483966 0.3568896 0.3641512
+##  [36] 0.3652289 0.3657194 0.3659658 0.3667224 0.3685645 0.3784129 0.3814792
+##  [43] 0.3819836 0.3847959 0.3894779 0.3895902 0.3900900 0.3913713 0.3931901
+##  [50] 0.3937449 0.3940557 0.3963589 0.3965841 0.3981303 0.3983923 0.3989341
+##  [57] 0.3986640 0.3985283 0.3962997 0.3954212 0.3947514 0.3923655 0.3920034
+##  [64] 0.3915313 0.3913203 0.3906752 0.3871700 0.3684812 0.3615321 0.3604207
+##  [71] 0.3514266 0.3453751 0.3306238 0.3271382 0.3247188 0.3191723 0.2806525
+##  [78] 0.2765503 0.2591897 0.2581839 0.2540568 0.2506080 0.2482592 0.2482314
+##  [85] 0.2408098 0.2099807 0.2053073 0.1654391 0.1643841 0.1367305 0.1341880
+##  [92] 0.1306389 0.1260445 0.1128742 0.1125995 0.1053939 0.0855256 0.0552586
+##  [99] 0.0233342 0.0037051
+</code></pre>
+
+<pre><code class="r">
+prod(L)
+</code></pre>
+
+<pre><code>## [1] 5.538e-67
+</code></pre>
+
+<p>This is a ridiculously small number!
+Which is why we have the <strong>Negative Log Likelihood</strong>, also known as the <strong>deviance</strong>:</p>
+
+<pre><code class="r">-sum(log(L))
+</code></pre>
+
+<pre><code>## [1] 152.6
+</code></pre>
+
+<p>We can encapsulate it into a single function:</p>
+
+<pre><code class="r">deviance.function &lt;- function(x, mean, sd) {
+    LL &lt;- dnorm(x = x, mean = mean, sd = sd, log = TRUE)  # note the log!!!
+    deviance &lt;- -sum(LL)
+    return(deviance)
+}
+
+# it&#39;s a function of model parameters, so try to play around with different
+# paramter values
+deviance.function(x, mean = 0, sd = 1)
+</code></pre>
+
+<pre><code>## [1] 152.6
+</code></pre>
+
+<p>Deviance (negative log-likelihood) can be then minimized (likelihood is maximized) in order to find the most likely model parameters - these are the <strong>Maximum Likelihood Estimators</strong> of model parameters.</p>
+
+<p>One can use <code>optim()</code> for automatic likelihood optimization.</p>
+
+</body>
+
+</html>
+

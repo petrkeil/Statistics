@@ -1,0 +1,136 @@
+Univariate Normal Model
+========================================================
+
+**Simulation of data in R is easy!** The R functions ```rnorm()```, ```rpois()```, ```runif()```, ```rbinom()```, ```rgamma()```, ```rbeta()``` etc. are exactly for that.
+
+We will generate some Normally-distributed data:
+```{r}
+  my.mean <- 0
+  my.sd <- 1
+  my.n <- 100
+  x <- rnorm(n=my.n, mean=my.mean, sd=my.sd)
+  x <- sort(x)
+  x
+```
+
+Plotting the data and PDF that generated them:
+```{r fig.width=7, fig.height=6, tidy=FALSE}
+ # empirical histogram
+  hist(x, freq=FALSE, ylab="Density")
+ # adding the points to the bottom  
+  points(x, rep(0, times=my.n))
+ 
+ # plotting the probability density function (PDF)
+ # used to generate the data
+   x2 <- seq(from=min(x), to=max(x), by=0.1)
+ # calculating the probability density   
+   y <- dnorm(x2, mean=my.mean, sd=my.sd)
+  
+   lines(x2, y)
+```
+
+********************************************************************************
+
+
+Likelihood - single data point
+------------------------------
+
+The *likelihood function* is the density evaluated at the data $x_1$, ... ,$x_n$, viewed as a function of model parameters ($\mu$ and $\sigma$ in case of the Normal model). We write it as $L(\mu, \sigma | x) = p(x | \mu, \sigma)$.  
+
+**Calculation of likelihood in R is easy!** The R functions ```dnorm()```, ```dpois()```, ```dunif()```, ```dbinom()```, ```dgamma()```, ```dbeta()``` etc. are exactly for that!
+
+Example: What is the probability density at the specific value of the data, given the $Normal(\mu, \sigma)$ model?
+
+```{r}
+# this is the data point that we will examine:
+one.data.point <- x[1]
+
+# this is how you calculate the likelihood for the data point:
+L <- dnorm(x=one.data.point, mean=my.mean, sd=my.sd)
+L
+```
+
+```{r, fig.width=5, fig.height=5, tidy=FALSE}
+likelihood.plotter <- function(x, point.index, mean, sd)
+{
+  x.axis <- seq(from=min(x), to=max(x), by=0.1)
+  y.axis <- dnorm(x.axis, mean=mean, sd=sd)
+  point.value <- round( x[point.index], 2)
+  
+  L <-dnorm(point.value, mean=mean, sd=sd)
+  L <- round(L, 4)
+  
+  # plotting  
+  title <- paste("Model parameters: mean =", mean, "; sd =", sd)
+  plot(x.axis, y.axis, 
+       ylim=c(0,max(y.axis)), 
+       type="l", xlab="x", ylab="PDF",
+       main=title)
+  points(x, rep(0, times=length(x)), col="grey")
+  points(point.value, 0, pch=19)
+  lines(c(point.value,point.value), c(0, L), col="red")
+  lines(c(min(x), point.value), c(L, L), col="red")
+  text(x=min(x), y=L+0.02, pos=4,
+       labels=paste("p(x|mean,sd) =",L), col="red")
+  text(x=point.value+0.02, y=0.02, pos=4,
+       labels=paste("x =",point.value), col="red")
+} 
+```
+
+Let's play around with the function a bit. Try to change the paramters and see
+what it does:
+```{r}
+  likelihood.plotter(x=x, point.index=30, mean=0, sd=1)
+```
+
+********************************************************************************
+
+Likelihood - whole dataset
+--------------------------
+
+Basic probability theory tells us that:
+
+$$P(A \cap B) = P(A) \times P(B|A) = P(B) \times P(A|B) $$
+
+The problem is that $$ P( A \cap B \cap C \cap D )$$
+can be almost impossible to calculate,
+
+**with the exception of**
+ A and B being independent! Then: 
+$$P(A \cap B) = P(A) \times P(B) $$
+and hence
+$$ P( A \cap B \cap C \cap D ) = P(A) \times P(B) \times P(C) \times P(D)$$
+
+It follows that it is useful to subject *probability density $p()$* to the same rules as *probability $P()$*. Hence, we can calculate the likelihood for the whole dataset as a product of likelihoods for all data points!
+
+```{r}
+  x
+
+  L <- dnorm(x=x, mean=my.mean, sd=my.sd)
+  L
+
+  prod(L)
+```
+This is a ridiculously small number!
+Which is why we have the **Negative Log Likelihood**, also known as the **deviance**:
+```{r}
+  - sum(log(L))
+```
+
+We can encapsulate it into a single function:
+```{r}
+  deviance.function <- function(x, mean, sd)
+  {
+    LL <- dnorm(x=x, mean=mean, sd=sd, log=TRUE) # note the log!!!
+    deviance <- - sum(LL)
+    return(deviance)
+  }
+
+  # it's a function of model parameters, so try to play
+  # around with different paramter values
+  deviance.function(x, mean=0, sd=1)
+```
+
+Deviance (negative log-likelihood) can be then minimized (likelihood is maximized) in order to find the most likely model parameters - these are the **Maximum Likelihood Estimators** of model parameters.
+
+One can use ```optim()``` for automatic likelihood optimization.

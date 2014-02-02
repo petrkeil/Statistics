@@ -1,0 +1,85 @@
+Univariate Poisson Model
+========================================================
+
+Let's explore the Poisson model a bit and simulate some data using ```rpois()```:
+```{r}
+rpois(n=100, lambda=1)
+```
+
+We can plot the "empirical frequency histogram" for simulated data with 3 different values of parameter $\lambda$:
+```{r, tidy=FALSE}
+  plot(c(0,35), c(0,1), type="n",
+       xlab="x", ylab="Frequency")
+
+  x <- rpois(n=100, lambda=1)
+       hist(x, add=T, freq=FALSE, col="blue")
+  x <- rpois(n=100, lambda=5)
+       hist(x, add=T, freq=FALSE, col="red")
+  x <- rpois(n=100, lambda=20)
+       hist(x, add=T, freq=FALSE, col="green")
+```
+
+Now we can plot the respective **probability mass functions**:
+```{r, tidy=FALSE}
+  plot(0:35, dpois(0:35, lambda=1), 
+       col="blue", pch=19, 
+       ylab="Probability mass",
+       xlab="x")
+  points(0:35, dpois(0:35, lambda=5), col="red", pch=19)
+  points(0:35, dpois(0:35, lambda=20), col="green", pch=19)
+```
+***
+
+Poisson likelihood
+------------------
+
+I will generate the artificial data again:
+```{r}
+x <- rpois(n=100, lambda=8)
+x
+```
+
+Poisson distribution is didactically convenient as it only has the one parameter $\lambda$. We can write the *deviance* (negative log-likelihood) function for a given dataset $x$:
+```{r, tidy=FALSE}
+  deviance.function <- function(x, lambda)
+  {
+    LL <- dpois(x, lambda, log=TRUE) # the log likelihood
+    deviance <- -sum(LL)
+    return(deviance)
+  }
+```
+
+We can try different values of $\lambda$:
+```{r}
+  deviance.function(x, lambda=10)
+```
+
+And we can evaluate the ```deviance.function``` for values of $\lambda$ between 0 and 35:
+```{r, tidy=FALSE}
+  lambdas <- 0:35
+  deviances <- numeric(36) # empty numeric vector
+  
+  for(i in 1:36)
+  {
+    deviances[i] <- deviance.function(x, lambdas[i])  
+  }
+```
+
+Our maximum likelihood exstimate (MLE) of $\lambda$ is:
+```{r}
+MLE <- lambdas[which.min(deviances)] 
+MLE
+```
+
+And this is the plot of the deviance function, together with the 
+MLE (vertical line):
+```{r}
+plot(lambdas, deviances, ylab="Deviance (Negative Log Likelihood)")
+abline(v=MLE)
+```
+
+
+
+
+
+
