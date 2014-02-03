@@ -3,7 +3,7 @@ Linear regression
 
 The data
 --------
-We will upload data from Crawley's R Book, chapter 10 (Linear Regression). The data show the growht of catepillars fed on experimental diets differing in their tannin contnent.
+We will download data from **Michael Crawley's R Book**, Chapter 10 (Linear Regression). The data show the growht of catepillars fed on experimental diets differing in their tannin contnent.
 
 ![danaus caterpillar figure](figure/danaus.png)
 ![danaus caterpillar figure](figure/Tannic_acid.png)
@@ -182,16 +182,16 @@ model.fit
 ##  3 chains, each with 2000 iterations (first 1000 discarded)
 ##  n.sims = 3000 iterations saved
 ##          mu.vect sd.vect   2.5%    25%    50%    75%  97.5%  Rhat n.eff
-## a         11.740   1.334  9.090 10.944 11.718 12.494 14.435 1.001  3000
-## b         -1.207   0.281 -1.759 -1.376 -1.208 -1.040 -0.635 1.001  3000
-## sigma      2.063   0.693  1.188  1.571  1.902  2.378  3.986 1.002  1100
-## deviance  36.800   3.275 33.052 34.361 35.946 38.343 45.443 1.002  1800
+## a         11.681   1.406  8.965 10.869 11.689 12.479 14.446 1.018  2600
+## b         -1.201   0.290 -1.748 -1.373 -1.204 -1.033 -0.621 1.007  1200
+## sigma      2.122   0.864  1.198  1.587  1.915  2.406  4.212 1.015   430
+## deviance  37.007   3.689 33.146 34.400 36.005 38.542 46.664 1.018   410
 ## 
 ## For each parameter, n.eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor (at convergence, Rhat=1).
 ## 
 ## DIC info (using the rule, pD = var(deviance)/2)
-## pD = 5.4 and DIC = 42.2
+## pD = 6.8 and DIC = 43.8
 ## DIC is an estimate of expected predictive error (lower deviance is better).
 ```
 
@@ -280,14 +280,19 @@ Plotting the predictions:
 ```r
 plot(c(0, 8), c(0, 18), type = "n", xlab = "tannin", ylab = "growth")
 points(catepil$tannin, catepil$growth, pch = 19)
-lines(catepil$tannin, mu[, "50%"])
-lines(catepil$tannin, mu[, "2.5%"], lty = 2)
-lines(catepil$tannin, mu[, "97.5%"], lty = 2)
+lines(catepil$tannin, mu[, "50%"], col = "red")
+lines(catepil$tannin, mu[, "2.5%"], col = "red", lty = 2)
+lines(catepil$tannin, mu[, "97.5%"], col = "red", lty = 2)
 lines(catepil$tannin, predictions[, "2.5%"], lty = 3)
 lines(catepil$tannin, predictions[, "97.5%"], lty = 3)
 ```
 
 ![plot of chunk unnamed-chunk-14](figure/unnamed-chunk-14.png) 
 
-The figure shows the expected value (solid), 95% credible intervals of the expected value (dashed) and 95% prediction intervals (dotted). 
+The figure shows the **median expected value** (solid red), **95% credible intervals of the expected value** (dashed red) and **95% prediction intervals** (dotted). 
+
+.
+.
+.
+
 

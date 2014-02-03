@@ -3,7 +3,7 @@ Linear regression
 
 The data
 --------
-We will upload data from Crawley's R Book, chapter 10 (Linear Regression). The data show the growht of catepillars fed on experimental diets differing in their tannin contnent.
+We will download data from **Michael Crawley's R Book**, Chapter 10 (Linear Regression). The data show the growht of catepillars fed on experimental diets differing in their tannin contnent.
 
 ![danaus caterpillar figure](figure/danaus.png)
 ![danaus caterpillar figure](figure/Tannic_acid.png)
@@ -162,11 +162,16 @@ Plotting the predictions:
 ```{r}
 plot(c(0,8), c(0,18), type="n", xlab="tannin", ylab="growth")
 points(catepil$tannin, catepil$growth, pch=19)
-lines(catepil$tannin, mu[,"50%"])
-lines(catepil$tannin, mu[,"2.5%"], lty=2)
-lines(catepil$tannin, mu[,"97.5%"], lty=2)
+lines(catepil$tannin, mu[,"50%"], col="red")
+lines(catepil$tannin, mu[,"2.5%"], col="red", lty=2)
+lines(catepil$tannin, mu[,"97.5%"], col="red", lty=2)
 lines(catepil$tannin, predictions[,"2.5%"], lty=3)
 lines(catepil$tannin, predictions[,"97.5%"], lty=3)
 ```
-The figure shows the expected value (solid), 95% credible intervals of the expected value (dashed) and 95% prediction intervals (dotted). 
+The figure shows the **median expected value** (solid red), **95% credible intervals of the expected value** (dashed red) and **95% prediction intervals** (dotted). 
+
+.
+.
+.
+
 

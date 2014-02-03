@@ -1,5 +1,5 @@
-Time Series Analysis in JAGS
-============================
+Time Series Analysis
+====================
 
 The Data 
 --------
@@ -21,9 +21,12 @@ Here is some preliminary data exploration:
 Model 1 - sine function
 -----------------------
 
-I will models that were proposed by [Bulmer (1977) *A statystical analysis of the 10-year cycle in Canada*. Journal of Animal Ecology, 43: 701-718](http://www.jstor.org/stable/3532). The first model is the equation 1 in  Bulmer's (1977):
-$$ \log \lambda_t = \beta_0 + \beta_1 \sin( 2 \pi \beta_2 (t - \beta_3) ) $$
-$$ y_t \sim Poisson(\lambda_t) $$ 
+I will models that were proposed by [Bulmer (1977) *A statystical analysis of the 10-year cycle in Canada*. Journal of Animal Ecology, 43: 701-718](http://www.jstor.org/stable/3532). The first model is the Equation 1 in  Bulmer's (1977):
+
+$\log \lambda_t = \beta_0 + \beta_1 \sin( 2 \pi \beta_2 (t - \beta_3) )$
+
+$y_t \sim Poisson(\lambda_t)$ 
+
 Note that I have modified the model so that the observed number of trapped lynx individuals $y_i$ is an outcome of a Poisson-distributed random process.
 
 First, we need to prepare the data for JAGS:
