@@ -28,6 +28,11 @@ Advice
 - Learn the difference between data and prior.
 - Learn to make formal definition of models.
 
+Advice
+========================================================
+- Give your data and the code to the readers.
+
+
 %#&$*! IT STILL DOES NOT RUN
 ========================================================
 
