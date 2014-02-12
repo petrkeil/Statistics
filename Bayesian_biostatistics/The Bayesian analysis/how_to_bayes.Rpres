@@ -34,7 +34,7 @@ $p(y)$ ... the horrible thing
 Avoiding the horrible thing
 ========================================================
 
-In most cases we can't calculate $p(y)$. But we can calculate the ratio of $p(\theta_1|y_1)$ and  $p(\theta_2|y_2)$:
+In most cases we can't calculate $p(y)$. But we can calculate the ratio of $p(\theta_1|y)$ and  $p(\theta_2|y)$:
 
 $$\frac{p(\theta_1|y) }{ p(\theta_2|y)}=\frac{p(\theta_1) \times p(y|\theta_1)}{p(\theta_2) \times p(y|\theta_2)} = \alpha$$
 
@@ -45,7 +45,7 @@ $$p(\theta|y) \propto p(\theta) \times p(y|\theta) $$
 Sampling from the posterior
 ========================================================
 
-We can use the ratio $\frac{p(\theta_1|y_1) }{ p(\theta_2|y_2)}$ to sample from the posterior distribution by a numerical sampling algorithm called Markov Chain Monte Carlo (**MCMC**).
+We can use the ratio $\frac{p(\theta_1|y) }{ p(\theta_2|y)}$ to sample from the posterior distribution by a numerical sampling algorithm called Markov Chain Monte Carlo (**MCMC**).
 - Metropolis-Hastings algorithm
 - Gibbs algorithm
 

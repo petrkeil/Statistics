@@ -75,11 +75,11 @@ Bayesian model with imperfect detection
 
 **Model definition**
 
-$z_i \sim Bernoulli(\psi)$
+$z_i \sim Bernoulli(\psi_i)$
 
 $y_{ij} \sim (z_i \times p_{ij})$
 
-Where $z_i$ is the unobserved but true occurrence, $\psi$ is probability of occurrence, $y_{ij}$ is the detection or non-detection (the actual data) at site $i$ during visit $j$, and $p_{ij}$ is the detection probability of the species.
+Where $z_i$ is the unobserved but true occurrence, $\psi_i$ is probability of occurrence, $y_{ij}$ is the detection or non-detection (the actual data) at site $i$ during visit $j$, and $p_{ij}$ is the detection probability of the species.
 
 We also know that
 
@@ -87,7 +87,7 @@ $p_{ij}=f(environment_{ij})$
 
 and that
 
-$\psi=f(environment_i)$
+$\psi_i=f(environment_i)$
 
 ********************************************************************************
 
